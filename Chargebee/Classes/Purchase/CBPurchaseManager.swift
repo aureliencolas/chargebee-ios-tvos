@@ -15,7 +15,8 @@ public class CBPurchase: NSObject {
     public var buyProductHandler: ((Result<(status:Bool, subscriptionId:String?), Error>) -> Void)?
     
     private var authenticationManager = CBAuthenticationManager()
-    var productRequest: SKProductsRequestFactory = SKProductsRequestFactory()
+    var productsRequestFactory: SKProductsRequestFactory = SKProductsRequestFactory()
+    var productsRequest: SKProductsRequest?
 
     private var restoredPurchasesCount = 0
     private var activeProduct: SKProduct?
@@ -55,9 +56,9 @@ public extension CBPurchase {
     func retrieveProducts(withProductID productIDs: [String], completion receiveProductsHandler: @escaping (_ result: Result<[CBProduct], CBPurchaseError>) -> Void) {
         self.receiveProductsHandler = receiveProductsHandler
 
-        let request = self.productRequest.request(productIdentifiers: Set(productIDs))
-        request.delegate = self
-        request.start()
+        productsRequest = self.productsRequestFactory.request(productIdentifiers: Set(productIDs))
+        productsRequest?.delegate = self
+        productsRequest?.start()
     }
 
     /// Get the products without Product ID's
@@ -153,6 +154,7 @@ extension CBPurchase {
 // MARK: - SKProductsRequestDelegate methods
 extension CBPurchase: SKProductsRequestDelegate {
     public func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
+        productsRequest = nil
         debugPrint("response: \(response)")
         let products = response.products.cbProducts
         if products.isEmpty {
