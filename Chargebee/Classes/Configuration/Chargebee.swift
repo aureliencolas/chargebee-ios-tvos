@@ -10,8 +10,8 @@ public class Chargebee {
     private var client = NetworkClient()
     init() {}
 
-    public static func configure(site: String, apiKey: String, sdkKey: String? = nil, allowErrorLogging: Bool = true) {
-        CBEnvironment().configure(site: site, apiKey: apiKey, allowErrorLogging: allowErrorLogging, sdkKey: sdkKey)
+    public static func configure(site: String, apiKey: String, sdkKey: String? = nil, allowErrorLogging: Bool = true, _ completion: @escaping (_ success: Bool) -> Void) {
+        CBEnvironment().configure(site: site, apiKey: apiKey, allowErrorLogging: allowErrorLogging, sdkKey: sdkKey, completion)
     }
 
     public func retrieveSubscription(forSubscriptionID id: String, handler: @escaping CBSubscriptionHandler) {
