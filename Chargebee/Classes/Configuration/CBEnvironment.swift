@@ -4,7 +4,7 @@
 
 import Foundation
 
-class CBEnvironment {
+public class CBEnvironment {
     static var site: String = ""
     static var apiKey: String = ""
     static var encodedApiKey: String = ""
